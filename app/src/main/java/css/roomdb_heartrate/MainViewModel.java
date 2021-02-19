@@ -26,7 +26,7 @@ public class MainViewModel extends AndroidViewModel {
         heartrateRepository.insert(hr);
     }
 
-    public Integer GetNumberRates() {
+    public Integer getNumberRates() {
         return heartrateRepository.getNumberRates();
     }
 
