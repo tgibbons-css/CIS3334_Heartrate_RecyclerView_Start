@@ -20,14 +20,15 @@ public class HeartrateRepository {
         HeartrateDatabase db = HeartrateDatabase.getDatabase(application);
         heartrateDao = db.heartrateDao();
         allHeartrates = new ArrayList<Heartrate>();
-        //allHeartrates = heartrateDao.getAll();
     }
 
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
     List<Heartrate> getAllHeartrates() {
         HeartrateDatabase.databaseWriteExecutor.execute(() -> {
+            //heartrateDao.deleteAll();               // if database is currupted delete all the rows
             allHeartrates = heartrateDao.getAll();
+            Log.d("CIS 3334", "HeartrateRepository: Heartrates retreived = "+allHeartrates.size());
         });
         return allHeartrates;
     }
@@ -37,7 +38,16 @@ public class HeartrateRepository {
     void insert(Heartrate heartrate) {
         HeartrateDatabase.databaseWriteExecutor.execute(() -> {
             heartrateDao.insert(heartrate);
+            allHeartrates.add(heartrate);
         });
+    }
+
+    public Integer getNumberRates() {
+        return allHeartrates.size();
+    }
+
+    public Heartrate getHeartRate(Integer position) {
+        return allHeartrates.get(position);
     }
 
 }
